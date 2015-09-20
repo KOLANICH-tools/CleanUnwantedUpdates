@@ -1,0 +1,79 @@
+{
+	"uninstall": true,
+	"hide": true,
+	"online": true,
+	"blacklist": {
+		"kbs": [
+			971033,
+			2902907,
+			2952664,
+			2976978,
+			2977759,
+			2990214,
+			3012973,
+			3014460,
+			3015249,
+			3021917,
+			3022345,
+			3035583,
+			3044374,
+			3050265,
+			3050267,
+			3065987,
+			3068708,
+			3075249,
+			3075851,
+			3075853,
+			3080149
+		],
+		"ids": []
+	},
+	"whitelist": {
+		"ids": [],
+		"kbs": []
+	},
+	"ignoreUpdatesWhitelist": false,
+	"heuristics": {
+		"enabled": false,
+		"downloadKBPages": false,
+		"showPrevious": false,
+		"propertiesKeywords": {
+			"title": {
+				"blacklist": [
+					"telemetry",
+					"assistant",
+					"license"
+				]
+			},
+			"getEULA": {
+				"blacklist": [
+					"grant",
+					"privacy",
+					"telemetry",
+					"government"
+				]
+			}
+		},
+		"pagesKeywords": {
+			"blacklist": [
+				"telemetry",
+				"assistant",
+				"get windows 10",
+				"customer experience improvement"
+			]
+		},
+		"uselessLinks": [
+			"http://support.microsoft.com",
+			"http://microsoft.com"
+		],
+		"unwanted": {
+			"kbs": [],
+			"ids": []
+		},
+		"harmless": {
+			"ids": [],
+			"kbs": []
+		}
+	},
+	"debug": false
+}

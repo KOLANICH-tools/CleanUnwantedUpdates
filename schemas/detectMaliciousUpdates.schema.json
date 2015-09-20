@@ -1,0 +1,56 @@
+{
+	"type" : "object",
+	"title" : "result of detectMaliciusUpdates",
+	"description" : "This is an object returning by detectMaliciusUpdates with results of its work: the lists of updates to be deleted, hidden, etc and lists of other updates.",
+	"name" : "res",
+	"definitions" : {
+		"MSUpdate" : {
+			"type" : "object",
+			"format" : "MSUpdate",
+			"description" : "Represents MSUpdate object of libMSUpdater.js",
+			"id" : "MSUpdate"
+		},
+		"MSUpdateList" : {
+			"id" : "MSUpdateList",
+			"type" : "array",
+			"description" : "Represents an array of MSUpdate objects",
+			"items" : {
+				"$ref" : "#MSUpdate"
+			},
+			"uniqueItems" : true
+		}
+	},
+	"properties" : {
+		"toUninstall" : {
+			"$ref" : "#MSUpdateList",
+			"description" : "Updates needed to be uninstalled"
+		},
+		"toHide" : {
+			"$ref" : "#MSUpdateList",
+			"description" : "Updates needed to be hidden"
+		},
+		"whitelisted" : {
+			"$ref" : "#MSUpdateList",
+			"description" : "Updates which are explicitly whitelisted"
+		},
+		"heuristics" : {
+			"type" : "object",
+			"description" : "Heuristically detected updates, this doesn't mean that they are really unwanted or harmless, they must be manually checked",
+			"properties" : {
+				"known" : {
+					"$ref" : "#MSUpdateList",
+					"description" : "Updates known as heuristically detected in previous launches"
+				},
+				"newUnwanted" : {
+					"$ref" : "#MSUpdateList",
+					"description" : "Updates heuristically detected as unwanted in this launch"
+				},
+				"newHarmless" : {
+					"$ref" : "#MSUpdateList",
+					"description" : "Updates heuristically detected as harmless in this launch"
+				}
+			}
+		}
+	},
+	"required" : ["toUninstall", "toHide", "whitelisted", "heuristics"]
+}

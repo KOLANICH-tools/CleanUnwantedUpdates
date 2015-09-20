@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<job id="CleanUnwantedUpdates">
+<!-- 
+	This is free and unencumbered software released into the public domain.
+
+	Anyone is free to copy, modify, publish, use, compile, sell, or
+	distribute this software, either in source code form or as a compiled
+	binary, for any purpose, commercial or non-commercial, and by any
+	means.
+
+	In jurisdictions that recognize copyright laws, the author or authors
+	of this software dedicate any and all copyright interest in the
+	software to the public domain. We make this dedication for the benefit
+	of the public at large and to the detriment of our heirs and
+	successors. We intend this dedication to be an overt act of
+	relinquishment in perpetuity of all present and future rights to this
+	software under copyright law.
+
+	IN NO EVENT AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL ANY CONTRIBUTOR BE LIABLE TO YOU FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER ARISING AS A RESULT OF THIS AGGREEMENT OR OUT OF THE USE OR INABILITY TO USE THE WORK (INCLUDING BUT NOT LIMITED TO DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER COMMERCIAL DAMAGES OR LOSSES) OR OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE, EVEN IF SUCH CONTRIBUTOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. YOU ARE SOLELY RESPONSIBLE FOR DETERMINING THE APPROPRIATENESS OF USING OR REDISTRIBUTING THE WORK AND ASSUME ANY RISKS ASSOCIATED WITH YOUR EXERCISE OF PERMISSIONS UNDER THIS AGGREEMENT. YOU ALSO AUTHORIZE THE SOFTWARE TO ACCESS, MODIFY, DESTROY, CREATE AND TRANSFER INFORMATION STORED IN YOUR COMPUTER.
+
+	For more information, please refer to <http://unlicense.org/>
+	 -->
+	<description>This is a tool made to remove privacy harming updates and heuristically detect the unknown privacy harming updates</description>
+	
+	<!-- utility functions which must be defined in the beginning -->
+	<script language="JScript" src="src/util.js"/>
+	
+	<!-- Checks whether has rights, run with cscript and sets variable rootFolder -->
+	<script language="JScript" src="src/PrepareEnvironment.js"/>
+	
+	
+	<!-- needed for htmlparser2 to decode entities, but has differrent license, so store it in separate file -->
+	<script language="JScript" src="lib/codePoint.js"/>
+	<!-- a pure JS HTML parser; We don't use ActiveX objects because everyone knows that they have not been updated for a very long time and probably contain critical vulnerabilities -->
+	<script language="JScript" src="lib/htmlparser2.js"/>
+	<!-- JSON parser and serializer -->
+	<script language="JScript" src="lib/json3.js"/>
+	<!-- JSON schema validator -->
+	<script language="JScript" src="lib/json_schema.js"/>
+	
+	
+	<!-- a function which removes tags from HTML, my "readability" bicycle -->
+	<script language="JScript" src="src/libHTML2Text.js"/>
+	<!-- loads a wrapper library to deal with MS Update using JS -->
+	<script language="JScript" src="src/libMSUpdater.js"/>
+	
+	<!-- including cheeckers -->
+	<script language="JScript" src="src/Score.js"/>
+	<script language="JScript" src="src/Checkers/Checker.js"/>
+	<script language="JScript" src="src/Checkers/CheckersSet.js"/>
+	<script language="JScript" src="src/Checkers/IsUpdateListedChecker.js"/>
+	<script language="JScript" src="src/Checkers/HasSubstringInPagesChecker.js"/>
+	<script language="JScript" src="src/Checkers/HasSubstringInPropertyChecker.js"/>
+	
+	<script language="JScript" src="src/detectors.js"/>
+	<script language="JScript" src="src/CleanUnwantedUpdates.js"/>
+</job>
