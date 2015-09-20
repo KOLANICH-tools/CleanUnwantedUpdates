@@ -1,0 +1,138 @@
+{
+	"type" : "object",
+	"description" : "Config of cleaner",
+	"definitions" : {
+		"kbList" : {
+			"type" : "array",
+			"default" : [],
+			"description" : "List of IDs of KB articles (one update may have multiple KB articles)",
+			"items" : {
+				"type" : "integer"
+			},
+			"uniqueItems" : true
+		},
+		"idList" : {
+			"type" : "array",
+			"description" : "List of IDs of updates",
+			"items" : {
+				"type" : "string",
+				"description" : "An explanation about the puropose of this instance described by this schema.",
+				"format" : "uuid"
+			},
+			"uniqueItems" : "true",
+			"default" : []
+		},
+		"keywordsList" : {
+			"type" : "array",
+			"default" : [],
+			"description" : "A list of keywords",
+			"items" : {
+				"type" : "string"
+			},
+			"uniqueItems" : true
+		},
+		"updatesList" : {
+			"type" : "object",
+			"default" : {},
+			"propeties" : {
+				"kbs" : {
+					"$ref" : "#/definitions/kbList"
+				},
+				"ids" : {
+					"$ref" : "#/definitions/idList"
+				}
+			}
+		},
+		"keywordsGroup" : {
+			"type" : "object",
+			"default" : {},
+			"description" : "A combination of multiple keyword lists, usually a blacklist and a whitelist",
+			"propeties" : {
+				"blacklist" : {
+					"$ref" : "#/definitions/keywordsGroup/keywordsList"
+				},
+				"whitelist" : {
+					"$ref" : "#/definitions/keywordsGroup/keywordsList"
+				}
+			}
+		}
+	},
+	"properties" : {
+		"uninstall" : {
+			"type" : "boolean",
+			"default" : true,
+			"description" : "Determines whether unwanted updates should be uninstalled"
+		},
+		"hide" : {
+			"type" : "boolean",
+			"default" : true,
+			"description" : "Determines whether unwanted updates should be hiden"
+		},
+		"ignoreUpdatesWhitelist" : {
+			"type" : "boolean",
+			"default" : false,
+			"description" : "Ignore whitelist"
+		},
+		"online" : {
+			"type" : "boolean",
+			"default" : true,
+			"description" : "Connect to MS Update servers to get info about published but not yet installed updates"
+		},
+		"debug" : {
+			"type" : "boolean",
+			"default" : false,
+			"description" : "Get updates from updates.json file instead of MS Update, disable applying changes"
+		},
+		"whitelist" : {
+			"$ref" : "#/definitions/updatesList"
+		},
+		"blacklist" : {
+			"$ref" : "#/definitions/updatesList"
+		},
+		"heuristics" : {
+			"type" : "object",
+			"default" : {},
+			"description" : "Used to heuristically detect unwanted addons",
+			"properties" : {
+				"enabled" : {
+					"type" : "boolean",
+					"default" : false,
+					"description" : "Enables heuristics"
+				},
+				"downloadKBPages" : {
+					"type" : "boolean",
+					"default" : false,
+					"description" : "Download kb pages of addons and look for keywords in them"
+				},
+				"propertiesKeywords" : {
+					"type" : "object",
+					"default" : {},
+					"description" : "Sets of properties to be checked, the key is property name, the value is keywords group",
+					"additionalProperties" : {
+						"$ref" : "#/definitions/keywordsGroup",
+						"uniqueItems" : true
+					},
+					"uniqueItems" : true
+				},
+				"pagesKeywords" : {
+					"$ref" : "#/definitions/keywordsGroup"
+				},
+				"uselessLinks" : {
+					"type" : "array",
+					"default" : [],
+					"description" : "Links, not referencing KB articles",
+					"items" : {
+						"type" : "string",
+						"format" : "uri"
+					}
+				},
+				"unwanted" : {
+					"$ref" : "#/definitions/updatesList"
+				},
+				"harmless" : {
+					"$ref" : "#/definitions/updatesList"
+				}
+			}
+		}
+	}
+}
