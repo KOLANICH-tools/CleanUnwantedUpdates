@@ -129,7 +129,7 @@ function main() {
 				WScript.Echo("Hiding of "+updateToDescr(res.toHide[i])+" failed"+ex.message);
 			}
 		}
-		WScript.Echo("Hidden succesfully "+successfullyHiden+" updates, "+(res.toHide.length-successfullyHiden)+"failed !");
+		WScript.Echo("Hidden succesfully "+successfullyHiden+" updates, "+(res.toHide.length-successfullyHiden)+" failed !");
 	}
 }
 function putUpdatesToConfigList(arr, list) {
