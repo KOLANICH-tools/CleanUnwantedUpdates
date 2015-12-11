@@ -76,6 +76,9 @@ function main() {
 	}
 	var updates;
 	var updater = new MSUpdater();
+	if(updater.session.UserLocale != 0x0409 && !config.online){
+		WScript.Echo(String.fromCharCode(7)+"!!! MS Update will return localised strings without connection to update servers even if we set locale to English, if you wanna make it work, please, add the translated keywords");
+	}
 	updater.session.UserLocale = 0x0409; //en-us
 	var updatesQuery = "IsHidden=1 OR IsHidden=0";
 	if (!config.debug) {
@@ -102,8 +105,8 @@ function main() {
 	if(res.toUninstall.length)msg+="Following updates will be uninstalled" + (uninstall ? "" : " (simulation)") + ":\n\t" + updatesToDescrs(res.toUninstall).join("\n\t")+"\n";
 	if(res.toHide.length)msg+="Following updates will be hidden" + (hide ? "" : " (simulation)") + ":\n\t" + updatesToDescrs(res.toHide).join("\n\t")+"\n";
 	if (config.heuristics.enabled)
-		msg += "The following updates look suspicious (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newUnwanted).join("\n\t")+"\n";
-		 + "The following updates look innocent (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newHarmless).join("\n\t")+"\n";
+		msg += "The following updates look suspicious (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newUnwanted).join("\n\t")+"\n"
+		+ "The following updates look innocent (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newHarmless).join("\n\t")+"\n";
 	if (config.heuristics.showPrevious)
 		msg += "Cached heuristically detected from previous launches (move them either into whitelist or into blacklist after manual check):\n\t" + updatesToDescrs(res.heuristics.known).join("\n\t");
 	WScript.Echo(msg);
