@@ -37,6 +37,9 @@ Advanced usage
 --------------
 
 Also you can allow the tool heuristically detect unwanted updates. To do this you need to enable `heuristics.enable` in configuration file. When heuristic is enabled, the tool cached heuristically detected files into configuration file to prevent their reevaluation and, allow you easily get their list and easily white/blacklist them.
+
+WARNING: If you use it in non-english system, when `offline` is true, MS Update may provide localised strings for updates, which should cause false negatives. If you wanna use it offline, you should add localized keywords to the keywords.
+
 To allow the tool download pages from MS site use `heuristics.downloadKBPages`. To show info about cached heuristically detected updates use `heuristics.showPrevious`. To make debugging faster use `heuristics.debug` which will cause info about updates being cached into into `updates.json` file and loaded from that cache.
 
 Hacking
@@ -73,3 +76,4 @@ Thoughts, advices and warnings
  * Create a class extending `Checker` class. Constructor should initialize an instance, check should make check. When you make check, to report about the results of this check you need to modify the score. The `Score` class checks if the thresholds have been exceeded, and if they have it throws the exception, which is caught by `CheckersSet` class.
  * Create new instances, wrap them into `CheckersSet`s.
  * Call `CheckersSet.check` and process the value returned.
+* Set `debug` in config.json to `true` to make the tool to cache the updates into `updates.json`, which will lower the latency of each tool launch. Use it only while debugging because it will use obsolete data. 
