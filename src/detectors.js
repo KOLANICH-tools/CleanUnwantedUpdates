@@ -62,6 +62,7 @@ function detectUnwantedUpdates(updates, cfg) {
 	};
 	for (var i = 0, j; i < updates.length; ++i) {
 		var update = updates[i];
+		//WScript.Echo("Checking "+JSON.stringify(Object.keys(update.kbs)));
 		var score = detectors.detect.check(update, cfg);
 		if (score < 0) {
 			res.whitelisted.push(update);

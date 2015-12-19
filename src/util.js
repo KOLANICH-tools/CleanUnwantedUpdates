@@ -57,38 +57,54 @@ if (!("keys" in Object)) {
 	};
 }
 var hashtable2Array = Object.keys;
-
-function retrievePage(url) {
+var userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0";
+function retrievePage(url,referer) {
 	var whr;
-	try {
-		whr = new ActiveXObject("WinHttp.WinHttpRequest.5.1");
-		whr.Open("GET", url, false);
-		whr.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:40.0) Gecko/20100101 Firefox/40.0");
-		whr.SetRequestHeader("Accept-Language", "q=0.6,en-US;q=0.4,en;q=0.2");
-		whr.SetRequestHeader("DNT", "1");
-		whr.Send();
-	} catch (err) {
-		return null;
-	}
-	return whr.ResponseText;
+	referer=referer||url;
+	whr = new ActiveXObject("WinHttp.WinHttpRequest.5.1");
+	//whr.SetProxy(2, "localhost:8888");
+	whr.Open("GET", url, false);
+	whr.SetRequestHeader("User-Agent", userAgent);
+	whr.SetRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+	whr.SetRequestHeader("Accept-Language", "q=0.6,en-US;q=0.4,en;q=0.2");
+	whr.SetRequestHeader("Accept-Encoding", "gzip, deflate");
+	whr.SetRequestHeader("DNT", "1");
+	whr.SetRequestHeader("Referer", referer);
+	whr.SetRequestHeader("Cache-Control", "max-age=0");
+	whr.Option(2, "x-ansi");
+	whr.Send();
+	var res=null;
+	//try{
+		res=whr.ResponseText;
+	//}catch(e){
+		/*WScript.Echo("Failed to get text w/o ADO");
+		var oADO=new ActiveXObject("ADODB.Stream");
+		oADO.Type=1;
+		oADO.Mode=3;
+		oADO.Open();
+		oADO.Write(whr.ResponseBody);
+		oADO.Position=0;
+		oADO.Type=2;
+		oADO.Charset="x-ansi";
+		//oADO.Charset="utf-8";
+		res=oADO.ReadText();
+		oADO.Close();*/
+		
+		/*res="";
+		for(var i=0;i<whr.ResponseBody.Count();++i){
+			res+=String.fromCharCode(whr.ResponseBody.Item(i));
+		}*/
+		/*
+		var isSuccessful=false;
+		whr.WaitForResponse(-1,isSuccessful);
+		res=whr.ResponseStream.Read();//to mitigate if invalid unicode characters are inserted
+		*/
+	//}
+	delete whr;
+	return res;
 }
 function retrieveKB(kb) { //we have to use this function instead of links provided by MS because on MS site info is loaded through ajax
-	var whr;
-	try {
-		whr = new ActiveXObject("WinHttp.WinHttpRequest.5.1");
-		whr.Open("GET", "https://support.microsoft.com/api/content/kb/" + kb, false);
-		whr.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:40.0) Gecko/20100101 Firefox/40.0");
-		whr.SetRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		whr.SetRequestHeader("Accept-Language", "q=0.6,en-US;q=0.4,en;q=0.2");
-		whr.SetRequestHeader("Accept-Encoding", "gzip, deflate");
-		whr.SetRequestHeader("DNT", "1");
-		whr.SetRequestHeader("Referer", "https://support.microsoft.com/en-us/kb/" + kb);
-		whr.SetRequestHeader("Cache-Control", "max-age=0");
-		whr.Send();
-	} catch (err) {
-		return null;
-	}
-	return whr.ResponseText;
+	return retrievePage("https://support.microsoft.com/api/content/kb/" + kb, "https://support.microsoft.com/en-us/kb/" + kb);
 }
 function objectLength(obj) {
 	var i = 0;

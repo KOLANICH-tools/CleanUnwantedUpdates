@@ -44,7 +44,15 @@ HasSubstringInPagesChecker.prototype.check = function (update, config, score) { 
 				score.change(this.visited[kb]);
 		} else {
 			try{
-				var text = HTML2text(retrieveKB(kb)).toLowerCase();
+				var text = null;
+				try{
+					text=retrieveKB(kb);
+				}catch (err) {
+					WScript.Echo("Failed to get info about kb"+kb+":\n"+err.message);
+					score.change(Number.POSITIVE_INFINITY);
+				}
+				text=HTML2text(text).toLowerCase();
+				//WScript.Echo(text);
 				for (var j = 0; j < this.list.blacklist.length; ++j) {
 					var kw = this.list.blacklist[j];
 					if (text.indexOf(kw) > -1) {
