@@ -23,6 +23,8 @@ End User License Agreement
 
 7. This tool downloads webpages from Microsoft website in order to analyze them to detect whether the update is unwanted. Please don’t keep this option constantly enabled because I (and I’m sure most of yours too, because the MS site is the main source of information about updates, it’d be stupid to overload such a site) don’t want Microsoft’s site being overloaded. If you want to debug this tool, please use some caching proxy (like [Fiddler](http://www.telerik.com/fiddler) with [AutoResponder](http://docs.telerik.com/fiddler/KnowledgeBase/AutoResponder)) ([set proxy](https://msdn.microsoft.com/ru-ru/library/windows/desktop/aa384059.aspx) in `util.js` file in functions `retrieveKB` and `retrievePage`).
 
+8. **At the moment there are problems in the tool: when given incorrect UTF-8 it behaves incorrectly and crashes with uncaught exception because of a trouble in WinHttpRequest. Use branch [```fixing-WinHttpRequest```](https://github.com/KOLANICH/CleanUnwantedUpdates/tree/fixing-WinHttpRequest) as a temporary solution. The abilities to detect unwanted updates are limited to the pages containing only valid Unicode. If you have any ideas how to bypass this issue, please, either create an PR or write the ideas to [#1](https://github.com/KOLANICH/CleanUnwantedUpdates/issues/1).**
+
 How-to use
 ==========
 

@@ -117,7 +117,7 @@ function main() {
 			updater.uninstall(res.toUninstall);
 			WScript.Echo("Uninstalled!");
 		}catch(ex){
-			WScript.Echo("Uninstallation failed"+ex.message);
+			WScript.Echo("Uninstallation failed: "+ex.message);
 		}
 	}
 
@@ -129,7 +129,7 @@ function main() {
 				res.toHide[i].hide();
 				successfullyHiden++;
 			}catch(ex){
-				WScript.Echo("Hiding of "+updateToDescr(res.toHide[i])+" failed"+ex.message);
+				WScript.Echo("Hiding of "+updateToDescr(res.toHide[i])+" failed: "+ex.message);
 			}
 		}
 		WScript.Echo("Hidden succesfully "+successfullyHiden+" updates, "+(res.toHide.length-successfullyHiden)+" failed !");

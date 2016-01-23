@@ -31,8 +31,8 @@ function MSUpdateArticle(kb) { //< represents a kb article
 }
 MSUpdateArticle.kb = null;
 
-function MSUpdate(updObj) { //<represents update
-	this.updateObj = updObj;
+function MSUpdate(updateObj) { //<represents update
+	this.updateObj = updateObj;
 
 	this.title = this.updateObj.Title; //<update's title
 	this.installed = this.updateObj.IsInstalled; //<is update installed in system?
@@ -156,7 +156,7 @@ MSUpdater.prototype.getUpdates = function (criteria, online) { //<givess you upd
 MSUpdater.prototype._arr2Collection = function (arr) { //<converts  array of MSUpdate objects to IUpdateCollection (https://msdn.microsoft.com/en-us/library/aa386107.aspx)
 	var coll = new ActiveXObject("Microsoft.Update.UpdateColl");
 	for (var i = 0; i < arr.length; i++) {
-		coll.Add(arr[i].updObj);
+		coll.Add(arr[i].updateObj);
 	}
 	return coll;
 }
