@@ -31,12 +31,28 @@ var configName = rootFolder + "/config.json";
 var debugUpdatesFile = rootFolder + "/updates.json";
 var docFile = rootFolder + "/Readme.md";
 
+var style={
+	"success": function (a){return "\x1b[92m"+a+"\x1b[39m";},
+	"error": function (a){return "\x1b[91m"+a+"\x1b[39m";},
+	"info": function (a){return "\x1b[94m"+a+"\x1b[39m";},
+	"warning": function (a){return "\x1b[93m"+a+"\x1b[39m";},
+	"simulation": function (a){return "\x1b[33m"+a+"\x1b[39m";},
+	"action": function (a){return "\x1b[95m"+a+"\x1b[39m";},
+	"title": function (a){return "\x1b[1m"+a+"\x1b[21m";},
+	"source": function (a){return "\x1b[47;30m"+a+"\x1b[49;39m";},
+	"kb": function (a){return "\x1b[36m"+a+"\x1b[39m";},
+	"id": function (a){return "\x1b[35m"+a+"\x1b[39m";}
+}
+function dummy(x){
+	return x;
+}
+
 function main() {
-	WScript.Echo("WHS Unwanted Updates Detector and Cleaner\nThis is free software, feel free to modify and redistribute.\nhttps://github.com/KOLANICH/CleanUnwantedUpdates");
+	WScript.Echo(style.success("WHS Unwanted Updates Detector and Cleaner")+"\nThis is free software, feel free to modify and redistribute.\n"+style.info("https://gitlab.com/KOLANICH/CleanUnwantedUpdates"));
 	try {
 		var config = JSON.parse(readFromFile(configName));
 	} catch (err) {
-		WScript.Echo("Error parsing config");
+		WScript.Echo(style.error("Error parsing config"));
 		return;
 	}
 	var res = JSONSchema.validate(config, configSchema);
@@ -55,8 +71,13 @@ function main() {
 		uninstall = false;
 		hide = false;
 	}
+	if (!config.color){
+		for(var styleName in style){
+			style[styleName]=dummy;
+		}
+	}
 
-	WScript.Echo("Current config:\n" + JSON.stringify(config, null, "\t"));
+	WScript.Echo(style.info("Current config")+":\n" + style.source(JSON.stringify(config, null, "\t")));
 	function updatesToDescrs(updates) {
 		var descrs = [];
 		for (var i = 0; i < updates.length; i++) {
@@ -67,11 +88,11 @@ function main() {
 		return descrs;
 	}
 	function updateToDescr(upd){
-		var descr = "{" + upd.id + "} ";
+		var descr = style.id("{" + upd.id + "}")+" ";
 		for (var kb in upd.kbs) {
-			descr += "KB" + kb + " ";
+			descr += style.kb("KB" + kb) + " ";
 		}
-		descr += "| " + upd.title + " [ " + upd.urls.join(" ") + " ]";
+		descr += "| " + style.title(upd.title) + " [ " + upd.urls.join(" ") + " ]";
 		return descr;
 	}
 	var updates;
@@ -82,7 +103,7 @@ function main() {
 	updater.session.UserLocale = 0x0409; //en-us
 	var updatesQuery = "IsHidden=1 OR IsHidden=0";
 	if (!config.debug) {
-		WScript.Echo("Getting list of updates...");
+		WScript.Echo(style.action("Getting list of updates..."));
 		updates = updater.getUpdates(updatesQuery, config.online);
 	} else {
 		if (fs.FileExists(debugUpdatesFile)) {
@@ -92,32 +113,32 @@ function main() {
 			writeToFile(debugUpdatesFile, JSON.stringify(updates));
 		}
 	}
-	WScript.Echo(updates.length + " updates found. Filtering ....");
+	WScript.Echo(style.info(updates.length) + " updates "+style.success("found")+". "+style.action("Filtering ...."));
 	res = detectUnwantedUpdates(updates, config);
 	
 	config.heuristics.downloadKBPages = false;
-	WScript.Echo("Updating config...");
+	WScript.Echo(style.action("Updating config..."));
 	putUpdatesToConfigList(res.heuristics.newHarmless, config.heuristics.harmless);
 	putUpdatesToConfigList(res.heuristics.newUnwanted, config.heuristics.unwanted);
 	writeToFile(configName, JSON.stringify(config, null, "\t"));
 	
-	var msg ="Detection results:\n";
-	if(res.toUninstall.length)msg+="Following updates will be uninstalled" + (uninstall ? "" : " (simulation)") + ":\n\t" + updatesToDescrs(res.toUninstall).join("\n\t")+"\n";
-	if(res.toHide.length)msg+="Following updates will be hidden" + (hide ? "" : " (simulation)") + ":\n\t" + updatesToDescrs(res.toHide).join("\n\t")+"\n";
+	var msg =style.info("Detection results:\n");
+	if(res.toUninstall.length)msg+="Following updates "+style.action("will be uninstalled") + (uninstall ? "" : style.simulation(" (simulation)")) + ":\n\t" + updatesToDescrs(res.toUninstall).join("\n\t")+"\n";
+	if(res.toHide.length)msg+="Following updates will "+style.action("be hidden") + (hide ? "" : style.simulation(" (simulation)")) + ":\n\t" + updatesToDescrs(res.toHide).join("\n\t")+"\n";
 	if (config.heuristics.enabled)
-		msg += "The following updates look suspicious (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newUnwanted).join("\n\t")+"\n"
-		+ "The following updates look innocent (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newHarmless).join("\n\t")+"\n";
+		msg += "The following updates "+style.warning("look suspicious")+" (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newUnwanted).join("\n\t")+"\n"
+		+ "The following updates look "+style.success("innocent")+" (you may want to examine them manually):\n\t" + updatesToDescrs(res.heuristics.newHarmless).join("\n\t")+"\n";
 	if (config.heuristics.showPrevious)
-		msg += "Cached heuristically detected from previous launches (move them either into whitelist or into blacklist after manual check):\n\t" + updatesToDescrs(res.heuristics.known).join("\n\t");
+		msg += style.info("Cached")+" heuristically detected from previous launches (move them either into whitelist or into blacklist after manual check):\n\t" + updatesToDescrs(res.heuristics.known).join("\n\t");
 	WScript.Echo(msg);
 
 	if (uninstall&&res.toUninstall.length) {
-		WScript.Echo("Uninstalling...");
+		WScript.Echo(style.action("Uninstalling..."));
 		try{
 			updater.uninstall(res.toUninstall);
-			WScript.Echo("Uninstalled!");
+			WScript.Echo(style.success("Uninstalled!"));
 		}catch(ex){
-			WScript.Echo("Uninstallation failed: "+ex.message);
+			WScript.Echo(style.error("Uninstallation failed: "+ex.message));
 		}
 	}
 
@@ -129,10 +150,10 @@ function main() {
 				res.toHide[i].hide();
 				successfullyHiden++;
 			}catch(ex){
-				WScript.Echo("Hiding of "+updateToDescr(res.toHide[i])+" failed: "+ex.message);
+				WScript.Echo(style.action("Hiding")+" of "+updateToDescr(res.toHide[i])+" "+style.error("failed: "+ex.message));
 			}
 		}
-		WScript.Echo("Hidden succesfully "+successfullyHiden+" updates, "+(res.toHide.length-successfullyHiden)+" failed !");
+		WScript.Echo(style.success("Hidden succesfully")+" "+style.info(successfullyHiden)+" updates, "+style.info((res.toHide.length-successfullyHiden))+style.error(" failed !"));
 	}
 }
 function putUpdatesToConfigList(arr, list) {

@@ -26,7 +26,15 @@
 			3075853,
 			3080149,
 			3112336,
-			3123862
+			3123862,
+			3081954,
+			3139923,
+			3112343,
+			3068707,
+			3072318,
+			3064683,
+			3146449,
+			3150513
 		],
 		"ids": []
 	},
@@ -44,7 +52,7 @@
 	},
 	"ignoreUpdatesWhitelist": false,
 	"heuristics": {
-		"enabled": false,
+		"enabled": true,
 		"downloadKBPages": false,
 		"showPrevious": false,
 		"propertiesKeywords": {
@@ -52,7 +60,13 @@
 				"blacklist": [
 					"telemetry",
 					"assistant",
-					"license"
+					"license",
+					"grant",
+					"privacy",
+					"government",
+					"CEIP",
+					"out-of-box experience",
+					"OOBE"
 				]
 			},
 			"getEULA": {
@@ -69,7 +83,10 @@
 				"telemetry",
 				"assistant",
 				"get windows 10",
-				"customer experience improvement"
+				"customer experience improvement",
+				"CEIP",
+				"out-of-box experience",
+				"OOBE"
 			]
 		},
 		"uselessLinks": [
@@ -81,9 +98,10 @@
 			"ids": []
 		},
 		"harmless": {
-			"ids": [],
-			"kbs": []
+			"kbs": [],
+			"ids": []
 		}
 	},
-	"debug": false
+	"debug": false,
+	"color": false
 }

@@ -83,6 +83,11 @@
 			"default" : false,
 			"description" : "Get updates from updates.json file instead of MS Update, disable applying changes"
 		},
+		"color" : {
+			"type" : "boolean",
+			"default" : false,
+			"description" : "Uses colors in console. For Windows <10 you need [ansicon](https://github.com/adoxa/ansicon/releases)."
+		},
 		"whitelist" : {
 			"$ref" : "#/definitions/updatesList"
 		},
